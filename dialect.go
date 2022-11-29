@@ -21,6 +21,9 @@ type Dialect interface {
 	// or LONGBLOB depending on the maxsize
 	ToSqlType(val reflect.Type, maxsize int, isAutoIncr bool) string
 
+	// ToSqlDefaultType return default value
+	ToSqlDefaultType(val reflect.Type) string
+
 	// string to append to primary key column definitions
 	AutoIncrStr() string
 

@@ -47,7 +47,6 @@ func (t *TableMap) ResetSql() {
 // Automatically calls ResetSql() to ensure SQL statements are regenerated.
 //
 // Panics if isAutoIncr is true, and fieldNames length != 1
-//
 func (t *TableMap) SetKeys(isAutoIncr bool, fieldNames ...string) *TableMap {
 	if isAutoIncr && len(fieldNames) != 1 {
 		panic(fmt.Sprintf(
@@ -73,7 +72,6 @@ func (t *TableMap) SetKeys(isAutoIncr bool, fieldNames ...string) *TableMap {
 // Automatically calls ResetSql() to ensure SQL statements are regenerated.
 //
 // Panics if fieldNames length < 2.
-//
 func (t *TableMap) SetUniqueTogether(fieldNames ...string) *TableMap {
 	if len(fieldNames) < 2 {
 		panic(fmt.Sprintf(
@@ -135,7 +133,6 @@ func (t *TableMap) IdxMap(field string) *IndexMap {
 // Function will panic if one of the given for index columns does not exists
 //
 // Automatically calls ResetSql() to ensure SQL statements are regenerated.
-//
 func (t *TableMap) AddIndex(name string, idxtype string, columns []string) *IndexMap {
 	// check if we have a index with this name already
 	for _, idx := range t.indexes {
@@ -203,6 +200,14 @@ func (t *TableMap) SqlForCreate(ifNotExists bool) string {
 
 			if col.isPK || col.isNotNull {
 				s.WriteString(" not null")
+			}
+			//notnull,default:0  or notnull(,default:'')
+			if col.DefaultValue != "" {
+				s.WriteString(fmt.Sprintf(" default '%s'", col.DefaultValue))
+			} else {
+				if !col.isPK && stype != "datetime" && stype != "mediumblob" && stype != "text" && stype != "boolean" {
+					s.WriteString(fmt.Sprintf(" default '%s'", dialect.ToSqlDefaultType(col.gotype)))
+				}
 			}
 			if col.isPK && len(t.keys) == 1 {
 				s.WriteString(" primary key")

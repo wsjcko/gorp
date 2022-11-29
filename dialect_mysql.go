@@ -85,6 +85,35 @@ func (d MySQLDialect) ToSqlType(val reflect.Type, maxsize int, isAutoIncr bool) 
 	}
 }
 
+func (d MySQLDialect) ToSqlDefaultType(val reflect.Type) string {
+	switch val.Kind() {
+	case reflect.Ptr:
+		return d.ToSqlDefaultType(val.Elem())
+	case reflect.Bool:
+		return "false"
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return "0"
+	case reflect.Float64: //double
+		return "0.0"
+	case reflect.Float32: //double
+		return "0.00"
+	case reflect.Slice: //mediumblob
+		return ""
+	}
+	switch val.Name() {
+	case "NullInt64":
+		return "0"
+	case "NullFloat64":
+		return "0.0"
+	case "NullBool":
+		return "false"
+	case "Time":
+		return "NULL"
+	}
+	return ""
+}
+
 // Returns auto_increment
 func (d MySQLDialect) AutoIncrStr() string {
 	return "auto_increment"
