@@ -2,7 +2,7 @@
 
 [![build status](https://github.com/go-gorp/gorp/actions/workflows/go.yml/badge.svg)](https://github.com/go-gorp/gorp/actions)
 [![issues](https://img.shields.io/github/issues/go-gorp/gorp.svg)](https://github.com/go-gorp/gorp/issues)
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-gorp/gorp/v3.svg)](https://pkg.go.dev/github.com/go-gorp/gorp/v3)
+[![Go Reference](https://pkg.go.dev/badge/github.com/wsjcko/gorp/v3.svg)](https://pkg.go.dev/github.com/wsjcko/gorp/v3)
 
 ### Update 2016-11-13: Future versions
 
