@@ -209,6 +209,9 @@ func (t *TableMap) SqlForCreate(ifNotExists bool) string {
 					s.WriteString(fmt.Sprintf(" default '%s'", dialect.ToSqlDefaultType(col.gotype)))
 				}
 			}
+			if col.CommentValue != "" {
+				s.WriteString(fmt.Sprintf(" COMMENT '%s'", col.CommentValue))
+			}
 			if col.isPK && len(t.keys) == 1 {
 				s.WriteString(" primary key")
 			}

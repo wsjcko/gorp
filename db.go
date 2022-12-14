@@ -24,9 +24,8 @@ import (
 //
 // Example:
 //
-//     dialect := gorp.MySQLDialect{"InnoDB", "UTF8"}
-//     dbmap := &gorp.DbMap{Db: db, Dialect: dialect}
-//
+//	dialect := gorp.MySQLDialect{"InnoDB", "UTF8"}
+//	dbmap := &gorp.DbMap{Db: db, Dialect: dialect}
 type DbMap struct {
 	ctx context.Context
 
@@ -310,6 +309,7 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 			columnName := cArguments[0]
 			var maxSize int
 			var defaultValue string
+			var commnetValue string
 			var isAuto bool
 			var isPK bool
 			var isNotNull bool
@@ -336,6 +336,8 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 					maxSize, _ = strconv.Atoi(arg[1])
 				case "default":
 					defaultValue = arg[1]
+				case "comment":
+					commnetValue = arg[1]
 				case "primarykey":
 					isPK = true
 				case "autoincrement":
@@ -383,6 +385,7 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 			cm := &ColumnMap{
 				ColumnName:   columnName,
 				DefaultValue: defaultValue,
+				CommentValue: commnetValue,
 				Transient:    columnName == "-",
 				fieldName:    f.Name,
 				gotype:       gotype,
