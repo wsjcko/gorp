@@ -336,8 +336,6 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 					maxSize, _ = strconv.Atoi(arg[1])
 				case "default":
 					defaultValue = arg[1]
-				case "comment":
-					commnetValue = arg[1]
 				case "primarykey":
 					isPK = true
 				case "autoincrement":
@@ -351,6 +349,8 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 			if columnName == "" {
 				columnName = f.Name
 			}
+
+			commnetValue = f.Tag.Get("comment")
 
 			gotype := f.Type
 			valueType := gotype
