@@ -17,8 +17,11 @@ type MySQLDialect struct {
 	// Engine is the storage engine to use "InnoDB" vs "MyISAM" for example
 	Engine string
 
-	// Encoding is the character encoding to use for created tables
+	// Encoding is the character encoding to use for created tables ,as CHARSET
 	Encoding string
+
+	//COLLATE
+	Collate string
 }
 
 func (d MySQLDialect) QuerySuffix() string { return ";" }
@@ -145,7 +148,7 @@ func (d MySQLDialect) CreateTableSuffix() string {
 		panic(msg)
 	}
 
-	return fmt.Sprintf(" engine=%s charset=%s", d.Engine, d.Encoding)
+	return fmt.Sprintf(" engine=%s charset=%s collate=%s", d.Engine, d.Encoding, d.Collate)
 }
 
 func (d MySQLDialect) CreateIndexSuffix() string {
