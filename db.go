@@ -305,15 +305,15 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 		} else {
 			// Tag = Name { ','  Option }
 			// Option = OptionKey [ ':' OptionValue ]
-			cArguments := strings.Split(f.Tag.Get("db"), ",")
-			columnName := cArguments[0]
+			columnName := f.Tag.Get("db")
+			cArguments := strings.Split(f.Tag.Get("orm"), ",")
 			var maxSize int
 			var defaultValue string
 			var commnetValue string
 			var isAuto bool
 			var isPK bool
 			var isNotNull bool
-			for _, argString := range cArguments[1:] {
+			for _, argString := range cArguments[0:] {
 				argString = strings.TrimSpace(argString)
 				arg := strings.SplitN(argString, ":", 2)
 

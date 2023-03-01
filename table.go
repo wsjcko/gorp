@@ -57,6 +57,7 @@ func (t *TableMap) SetKeys(isAutoIncr bool, fieldNames ...string) *TableMap {
 	for _, name := range fieldNames {
 		colmap := t.ColMap(name)
 		colmap.isPK = true
+		colmap.isNotNull = true
 		colmap.isAutoIncr = isAutoIncr
 		t.keys = append(t.keys, colmap)
 	}
