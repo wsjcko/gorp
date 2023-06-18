@@ -24,9 +24,8 @@ import (
 //
 // Example:
 //
-//     dialect := gorp.MySQLDialect{"InnoDB", "UTF8"}
-//     dbmap := &gorp.DbMap{Db: db, Dialect: dialect}
-//
+//	dialect := gorp.MySQLDialect{"InnoDB", "UTF8"}
+//	dbmap := &gorp.DbMap{Db: db, Dialect: dialect}
 type DbMap struct {
 	ctx context.Context
 
@@ -306,14 +305,15 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 		} else {
 			// Tag = Name { ','  Option }
 			// Option = OptionKey [ ':' OptionValue ]
-			cArguments := strings.Split(f.Tag.Get("db"), ",")
-			columnName := cArguments[0]
+			columnName := f.Tag.Get("db")
+			cArguments := strings.Split(f.Tag.Get("orm"), ",")
 			var maxSize int
 			var defaultValue string
+			var commnetValue string
 			var isAuto bool
 			var isPK bool
 			var isNotNull bool
-			for _, argString := range cArguments[1:] {
+			for _, argString := range cArguments[0:] {
 				argString = strings.TrimSpace(argString)
 				arg := strings.SplitN(argString, ":", 2)
 
@@ -350,6 +350,8 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 				columnName = f.Name
 			}
 
+			commnetValue = f.Tag.Get("comment")
+
 			gotype := f.Type
 			valueType := gotype
 			if valueType.Kind() == reflect.Ptr {
@@ -383,6 +385,7 @@ func (m *DbMap) readStructColumns(t reflect.Type) (cols []*ColumnMap, primaryKey
 			cm := &ColumnMap{
 				ColumnName:   columnName,
 				DefaultValue: defaultValue,
+				CommentValue: commnetValue,
 				Transient:    columnName == "-",
 				fieldName:    f.Name,
 				gotype:       gotype,

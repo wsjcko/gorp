@@ -29,6 +29,7 @@ type ColumnMap struct {
 	MaxSize int
 
 	DefaultValue string
+	CommentValue string
 
 	fieldName  string
 	gotype     reflect.Type
